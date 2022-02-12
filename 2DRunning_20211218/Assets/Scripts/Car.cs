@@ -34,7 +34,27 @@ public class Car : MonoBehaviour
     public Vector2 v2Up = Vector2.up;
     public Vector2 v2One = Vector2.one;
     public Vector2 vector2A = new Vector2(3.5f, 9.5f);
+    // 輸入按鍵 KeyCode
+    public KeyCode key;
+    public KeyCode jump = KeyCode.Space;
+    public KeyCode forward = KeyCode.W;
+    public KeyCode weapon1 = KeyCode.Alpha1;        // 左邊數字
+    public KeyCode prop1 = KeyCode.Keypad1;         // 右邊數字 九宮格
+    public KeyCode mouseL = KeyCode.Mouse0;         // 滑鼠左鍵
+    public KeyCode mouseR = KeyCode.Mouse1;         // 滑鼠右鍵
+
+    // 遊戲物件 (Hierearchy 內白色線條圖示)、預製物 Prefab (藍色盒子)
+    public GameObject goCamera;
+    public GameObject goBanana;
+
+    // 元件 Component
+    // 可以儲存屬性面板上所有粗體字元件
+    // ※ 請去掉空格
+    public Transform traCar1;
+    public Transform tra2;
+    public Camera cam;
+    public SpriteRenderer spr;
     #endregion
 }
 
-// 非汽車類別資料
+// 非汽車類別資料ㄝ
