@@ -6,6 +6,7 @@ public class LearnOperator : MonoBehaviour
     public float b = 3;
     public int c = 100;
     public int d = 9;
+    public int e = 1;
 
     private void Start()
     {
@@ -20,6 +21,25 @@ public class LearnOperator : MonoBehaviour
         print("除法：" + (a / b));     // 3.333
         // 餘 %
         print("餘法：" + (a % b));     // 1
+
+        // 加一
+        // = 指定符號：先執行右邊運算再把結果指定給左邊
+        e = e + 1;
+        print("e 運算結果：" + e);
+        // 遞增
+        e++;
+        print("e 運算結果：" + e);
+        // 適用於減法上 e--;
+
+        // 加十
+        e = e + 10;
+        print("e 運算結果：" + e);   // 13
+        // 指定運算
+        e += 10;
+        print("e 運算結果：" + e);   // 23
+        // 適用加減乘除餘 -= *= /= %=
+        e -= 10;
+        print("e 運算結果：" + e);   // 13
         #endregion
 
         #region 運算子：比較
