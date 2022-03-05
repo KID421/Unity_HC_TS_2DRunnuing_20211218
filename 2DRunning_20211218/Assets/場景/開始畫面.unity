@@ -1123,7 +1123,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 605638831}
         m_TargetAssemblyTypeName: SceneControl, Assembly-CSharp
-        m_MethodName: LoadScene
+        m_MethodName: DelayLoadScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1268,7 +1268,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 605638831}
         m_TargetAssemblyTypeName: SceneControl, Assembly-CSharp
-        m_MethodName: QuitGame
+        m_MethodName: DelayQuitGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
