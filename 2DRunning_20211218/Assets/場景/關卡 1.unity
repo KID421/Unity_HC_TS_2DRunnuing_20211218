@@ -1007,13 +1007,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 238b57db18d0c684baff5901a79e7550, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 0
   jump: 500
   isSlide: 0
   isDead: 0
   parameterJump: "\u89F8\u767C\u8DF3\u8E8D"
   parameterSlide: "\u958B\u95DC\u6ED1\u884C"
   parameterDead: "\u89F8\u767C\u6B7B\u4EA1"
+  keyJump: 32
+  countJumpMax: 3
+  countJump: 0
 --- !u!1001 &647539249
 PrefabInstance:
   m_ObjectHideFlags: 0
