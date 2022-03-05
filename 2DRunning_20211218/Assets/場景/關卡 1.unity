@@ -1008,15 +1008,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0
-  jump: 500
+  jump: 300
   isSlide: 0
   isDead: 0
   parameterJump: "\u89F8\u767C\u8DF3\u8E8D"
   parameterSlide: "\u958B\u95DC\u6ED1\u884C"
   parameterDead: "\u89F8\u767C\u6B7B\u4EA1"
   keyJump: 32
-  countJumpMax: 3
+  countJumpMax: 2
   countJump: 0
+  v3GroudOffset: {x: 0.2, y: -1.5, z: 0}
+  v3GroundSize: {x: 1, y: 0.1, z: 1}
+  layerGround:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1001 &647539249
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13686,7 +13691,7 @@ GameObject:
   - component: {fileID: 1590850868}
   - component: {fileID: 1590850870}
   - component: {fileID: 1590850869}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: "\u4E00\u822C\u5730\u677F"
   m_TagString: Untagged
   m_Icon: {fileID: 0}

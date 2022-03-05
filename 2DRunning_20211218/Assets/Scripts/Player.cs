@@ -30,7 +30,6 @@ public class Player : MonoBehaviour
 
     // 存取 Transform 第一種方式
     // public Transform traPlayer;
-    #endregion
 
     // 屬性面板 ... > Debug 模式可以看到私人資料
     private Rigidbody2D rig;
@@ -38,8 +37,26 @@ public class Player : MonoBehaviour
     public int countJumpMax = 2;
 
     public int countJump;
+    #endregion
+
+    [Header("檢查地板位移")]
+    public Vector3 v3GroudOffset;
+    [Header("檢查地板尺寸")]
+    public Vector3 v3GroundSize = Vector3.one;
+    [Header("地板的圖層")]
+    public LayerMask layerGround;
 
     #region 事件
+    // 繪製圖示事件：在 Unity 內繪製輔助用的圖示，包含：線、方形、圓形等幾何圖形 (執行檔不會顯示)
+    private void OnDrawGizmos()
+    {
+        // 1. 決定圖示顏色
+        Gizmos.color = new Color(1, 0, 0.2f, 0.35f);
+        // 2. 繪製圖示
+        // 圖示.繪製方體(中心點，尺寸)
+        Gizmos.DrawCube(transform.position + v3GroudOffset, v3GroundSize);
+    }
+
     private void Start()
     {
         // GetComponent<元件類型>() - <> 泛型，所有類型
@@ -91,6 +108,18 @@ public class Player : MonoBehaviour
             rig.AddForce(new Vector2(0, jump));
             // 跳躍之後，跳躍段數減一
             countJump--;
+        }
+
+        // 2D 碰撞 = 2D 物理.方形覆蓋(中心點，尺寸，角度，圖層)
+        Collider2D hit = Physics2D.OverlapBox(transform.position + v3GroudOffset, v3GroundSize, 0, layerGround);
+
+        print("玩家的重力加速度：" + rig.velocity);
+
+        // 如果 2D 碰撞物件存在 並且 剛體的加速度 Y < 0 (往下掉落)
+        if (hit && rig.velocity.y < 0)
+        {
+            // 跳躍次數 指定 最大跳躍次數
+            countJump = countJumpMax;
         }
     }
     #endregion
