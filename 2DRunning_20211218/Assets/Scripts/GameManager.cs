@@ -7,6 +7,7 @@ using UnityEngine.UI;           // 引用 介面 API
 /// </summary>
 public class GameManager : MonoBehaviour
 {
+    #region 欄位
     [Header("血條")]
     public Image imgHp;
     [Header("時間")]
@@ -19,12 +20,33 @@ public class GameManager : MonoBehaviour
     public string tagProp = "道具";
     [Header("陷阱標籤")]
     public string tagTrap = "陷阱";
+    [Header("吃到會補血的道具名稱")]
+    public string propEatToAddHp = "補血";
+    [Header("吃到補血道具恢復血量"), Range(0, 50)]
+    public float valueEatToAddHp = 10;
+    [Header("結束畫面")]
+    public CanvasGroup groupFinal;
+    [Header("結束畫面標題")]
+    public Text textFinalTitle;
+    [Header("顯示結束畫面間隔"), Range(0, 0.5f)]
+    public float showFinalInterval = 0.1f;
+    [Header("死亡動畫參數")]
+    public string parameterDead = "觸發死亡";
+    [Header("過關區域名稱")]
+    public string namePass = "過關區域";
 
     private int score;
     private float hpMax;
+    private Animator ani;
+    private Player player;
+    #endregion
 
+    #region 事件
     private void Start()
     {
+        ani = GetComponent<Animator>();
+        player = GetComponent<Player>();
+
         hpMax = hp;             // 血量最大值遊戲開始時指定成血量初始值
     }
 
@@ -32,6 +54,37 @@ public class GameManager : MonoBehaviour
     {
         UpdateTimeUI();
         UpdateHpUI();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == tagProp)
+        {
+            AddScoreAndUpdateUI(collision.GetComponent<Prop>().score);                              // 加分數
+            if (collision.name.Contains(propEatToAddHp)) ChangeHpAndUpdateUI(valueEatToAddHp);      // 吃到會補血的道具就恢復血量
+            Destroy(collision.gameObject);                                                          // Destroy (物件) 刪除物件
+        }
+
+        if (collision.tag == tagTrap)
+        {
+            ChangeHpAndUpdateUI(-collision.GetComponent<Trap>().damage);
+        }
+
+        if (collision.name == namePass)
+        {
+            Win();
+        }
+    }
+    #endregion
+
+    #region 方法
+    /// <summary>
+    /// 顯示結束畫面
+    /// 每次增加 0.2
+    /// </summary>
+    private void ShowFinal()
+    {
+        groupFinal.alpha += 0.2f;
     }
 
     /// <summary>
@@ -51,7 +104,9 @@ public class GameManager : MonoBehaviour
     private void UpdateHpUI()
     {
         hp -= Time.deltaTime;
+        hp = Mathf.Clamp(hp, 0, hpMax);
         imgHp.fillAmount = hp / hpMax;
+        Lose();
     }
 
     /// <summary>
@@ -64,29 +119,50 @@ public class GameManager : MonoBehaviour
         textScore.text = "分數：" + score;
     }
 
+    // 更換名稱快捷鍵 Ctrl + R R
     /// <summary>
-    /// 造成傷害並且更新介面
+    /// 變更血量並且更新介面
     /// </summary>
-    /// <param name="damage">造成的傷害</param>
-    private void TakeDamageAndUpdateUI(float damage)
+    /// <param name="value">要變更的值</param>
+    private void ChangeHpAndUpdateUI(float value)
     {
-        hp -= damage;
+        hp += value;
+        hp = Mathf.Clamp(hp, 0, hpMax);                     // 血量 = 數學.夾住(血量，最小值，最大值) 將血量夾在最小~最大範圍內
         imgHp.fillAmount = hp / hpMax;
+        Lose();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    /// <summary>
+    /// 遊戲失敗
+    /// </summary>
+    private void Lose()
     {
-        // print("玩家碰到的物件：" + collision.name);
-
-        if (collision.tag == tagProp)
+        if (hp == 0 && groupFinal.alpha == 0)       // 如果 血量 等於 0 並且 結束畫面 透明度 等於 0
         {
-            AddScoreAndUpdateUI(collision.GetComponent<Prop>().score);
-            Destroy(collision.gameObject);                                  // Destroy (物件) 刪除物件
-        }
+            textFinalTitle.text = "挑戰失敗";
 
-        if (collision.tag == tagTrap)
-        {
-            TakeDamageAndUpdateUI(collision.GetComponent<Trap>().damage);
+            groupFinal.interactable = true;
+
+            ani.SetTrigger(parameterDead);
+            player.enabled = false;
+
+            // 延遲重複呼叫("方法名稱"，延遲時間，間隔)
+            InvokeRepeating("ShowFinal", 0, showFinalInterval);
         }
     }
+
+    /// <summary>
+    /// 勝利
+    /// </summary>
+    private void Win()
+    {
+        textFinalTitle.text = "挑戰成功";
+
+        groupFinal.interactable = true;
+
+        player.enabled = false;
+
+        InvokeRepeating("ShowFinal", 0, showFinalInterval);
+    }
+    #endregion
 }

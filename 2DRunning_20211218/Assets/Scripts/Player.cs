@@ -44,17 +44,21 @@ public class Player : MonoBehaviour
     public Vector3 v3GroundSize = Vector3.one;
     [Header("地板的圖層")]
     public LayerMask layerGround;
+    [Header("滑行按鍵")]
+    public KeyCode keySlide = KeyCode.DownArrow;
 
     // private Animation aniOld;        // 舊版 動畫系統
     // private Animator aniNew;         // 新版 動畫系統
 
     private Animator ani;
+    private CapsuleCollider2D cc2d;
     #endregion
 
-    [Header("滑行按鍵")]
-    public KeyCode keySlide = KeyCode.DownArrow;
+    [Header("音效")]
+    public AudioClip soundJump;
+    public AudioClip soundSlide;
 
-    private CapsuleCollider2D cc2d;
+    private AudioSource aud;
 
     #region 事件
     // 繪製圖示事件：在 Unity 內繪製輔助用的圖示，包含：線、方形、圓形等幾何圖形 (執行檔不會顯示)
@@ -74,6 +78,7 @@ public class Player : MonoBehaviour
         rig = GetComponent<Rigidbody2D>();
         ani = GetComponent<Animator>();
         cc2d = GetComponent<CapsuleCollider2D>();
+        aud = GetComponent<AudioSource>();
 
         // 跳躍段數 指定為 最大值
         countJump = countJumpMax;
@@ -117,6 +122,8 @@ public class Player : MonoBehaviour
         // 如果 按下跳躍 並且 跳躍段數 大於 零 就 往上跳
         if (inputJump && countJump > 0)
         {
+            rig.Sleep();
+            rig.WakeUp();
             // print("跳躍");
             // 剛體.添加推力(二維向量)
             rig.AddForce(new Vector2(0, jump));
@@ -124,6 +131,8 @@ public class Player : MonoBehaviour
             countJump--;
             // 動畫.設定觸發(動畫參數名稱)
             ani.SetTrigger(parameterJump);
+            // 音效來源.播放一次音效(音效，音量)
+            aud.PlayOneShot(soundJump);
         }
 
         // 2D 碰撞 = 2D 物理.方形覆蓋(中心點，尺寸，角度，圖層)
@@ -149,6 +158,9 @@ public class Player : MonoBehaviour
         // 更新碰撞器
         if (Input.GetKey(keySlide))
         {
+            // 如果 音效來源沒有在播放時 再播放滑行音效 (避免重播)
+            if (!aud.isPlaying) aud.PlayOneShot(soundSlide, 0.2f);
+
             ani.SetBool(parameterSlide, true);
 
             // 滑行：0.2, -0.85 | 2, 1.2 h

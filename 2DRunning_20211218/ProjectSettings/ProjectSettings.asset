@@ -12,8 +12,8 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
-  productName: 2DRunning_20211218
+  companyName: KID
+  productName: "\u8DD1\u5427\u5B69\u5B50"
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.14509805, g: 0.14509805, b: 0.14509805, a: 1}
